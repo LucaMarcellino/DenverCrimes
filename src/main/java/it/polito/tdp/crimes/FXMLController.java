@@ -5,8 +5,14 @@
 package it.polito.tdp.crimes;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import it.polito.tdp.crimes.model.Event;
 import it.polito.tdp.crimes.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,16 +31,16 @@ public class FXMLController {
     private URL location;
 
     @FXML // fx:id="boxCategoria"
-    private ComboBox<?> boxCategoria; // Value injected by FXMLLoader
+    private ComboBox<String> boxCategoria; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxMese"
-    private ComboBox<?> boxMese; // Value injected by FXMLLoader
+    private ComboBox<Integer> boxMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnAnalisi"
     private Button btnAnalisi; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxArco"
-    private ComboBox<?> boxArco; // Value injected by FXMLLoader
+    private ComboBox<DefaultWeightedEdge> boxArco; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnPercorso"
     private Button btnPercorso; // Value injected by FXMLLoader
@@ -49,7 +55,11 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	String categoria= boxCategoria.getValue();
+    	int mese = boxMese.getValue();
+    	model.creaGrafo(categoria, mese);
+    	txtResult.appendText(model.ottieniArchi().toString());
+    	boxArco.getItems().addAll(model.combo());    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -65,5 +75,34 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	for(int i=0; i<model.getList().size();i++) {
+    		if(!boxCategoria.getItems().contains(model.getList().get(i).getOffense_category_id())) {
+    			this.boxCategoria.getItems().add(model.getList().get(i).getOffense_category_id());
+    		}
+    		if(!boxMese.getItems().contains(model.getList().get(i).getReported_date().getMonthValue())) {
+    			this.boxMese.getItems().add((model.getList().get(i).getReported_date().getMonthValue()));
+    		}
+    	}
+    	
+    	Collections.sort(boxMese.getItems());
+    	Collections.sort(boxCategoria.getItems());
+    	txtResult.setEditable(false);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
