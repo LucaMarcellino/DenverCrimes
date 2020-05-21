@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+import it.polito.tdp.crimes.model.Crimini;
 import it.polito.tdp.crimes.model.Event;
 import it.polito.tdp.crimes.model.Model;
 import javafx.event.ActionEvent;
@@ -40,7 +41,7 @@ public class FXMLController {
     private Button btnAnalisi; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxArco"
-    private ComboBox<DefaultWeightedEdge> boxArco; // Value injected by FXMLLoader
+    private ComboBox<Crimini> boxArco; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnPercorso"
     private Button btnPercorso; // Value injected by FXMLLoader
@@ -50,6 +51,9 @@ public class FXMLController {
 
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
+    	txtResult.clear();
+    	Crimini c= boxArco.getValue();
+    	txtResult.appendText(model.trovaPercorso(c.getType1(),c.getType2()).toString());
 
     }
 
@@ -59,7 +63,7 @@ public class FXMLController {
     	int mese = boxMese.getValue();
     	model.creaGrafo(categoria, mese);
     	txtResult.appendText(model.ottieniArchi().toString());
-    	boxArco.getItems().addAll(model.combo());    	
+    	boxArco.getItems().addAll(model.ottieniArchi());    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
